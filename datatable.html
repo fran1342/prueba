@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    
+    <title>Hello, world!</title>
+  </head>
+  <body>
+
+    <div class="row">
+      <div class="col-12">
+        <table id="personajes"
+        class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nombre</th>
+              <th>Especie</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="col-12" id="informe"></div>
+    </div>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        var mi_tabla = $('#personajes').DataTable({
+          processing : true,
+          ajax : {
+            url : "https://rickandmortyapi.com/api/character",
+            dataSrc : "results",
+            type : "get",
+            cache : true,
+          },
+          columns : [
+            {data : null, defaultContent : ""},
+            {data : "name", defaultContent : ""},
+            {data : "species", defaultContent : ""},
+            {data : null, defaultContent : ""}
+          ],
+          columnDefs : [
+          // {
+          //   data : null,
+          //   targets : 1,
+          //   defaultContent : "",
+          //   render : function (datos, tipo, fila){
+          //     return datos.name + " - "+datos.origin.name
+          //   }
+          // },
+            {
+              searchable : false,
+              orderable : false,
+              data : null,
+              targets : 0,
+              defaultContent : "",
+              render : function (datos, tipo, fila){
+                return '<img src="'+datos.image+'" alt="" width="50px" height="50px" />';
+              }
+            },
+            {
+              searchable : false,
+              orderable : false,
+              data : null,
+              targets : -1,
+              defaultContent : "",
+              render : function (datos, tipo, fila){
+                return '<button class="btn btn-info has_click">Ver detalle</button>';
+              }
+            }
+          ]
+        });
+        $('#personajes tbody').on('click','.has_click',function(){
+          var datos = mi_tabla.row($(this).parents('tr')).data();
+          var img =  '<img src="'+datos.image+'" alt="" />';
+          var p_ = "<pre>"+JSON.stringify(datos)+"</pre>";;
+          $('#informe').html(img+"<br />"+p_);
+        });
+      });
+    </script>
+  </body>
+</html>

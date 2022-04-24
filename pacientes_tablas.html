@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    
+    <title>Tabla pacientes</title>
+  </head>
+  <body>
+
+    <div class="row">
+      <div class="col-12">
+        <table id="pacientes" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Hora inicio</th>
+                <th>Hora fin</th>
+                <th>Fecha</th>
+                <th>Motivo</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="col-12" id="informe"></div>
+    </div>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        var mi_tabla = $('#pacientes').DataTable({
+          //processing : true,
+          ajax : {
+            url : "http://localhost/sw15_movil_servicios/index.php/eventos/api/citas",
+            dataSrc : "",
+            type : "GET",
+            cache : true,
+          },
+          columns : [
+            {data : "id_cita", defaultContent : ""},
+            {data : "nombreCitado_cita", defaultContent : ""},
+            {data : "horaInicio_cita", defaultContent : ""},
+            {data : "horaFin_cita", defaultContent : ""},
+            {data : "fecha_cita", defaultContent : ""},
+            {data : "motivo_cita", defaultContent : ""}
+          ],
+        });
+      });
+    </script>
+  </body>
+</html>

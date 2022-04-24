@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link href='node_modules/fullcalendar-scheduler/main.css' rel='stylesheet' />
+    <script src='node_modules/fullcalendar-scheduler/main.js'></script>
+    
+    <title>Citas</title>
+</head>
+<body>
+    <!--Calendario-->
+    <div id="calendar"></div>
+    
+    <!--Modal para formulario-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Formulario</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form id="citas_form">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                      <label for="">Nombre:</label>
+                      <input type="text" name="nombre" id="nombre">
+                    </div>
+                  </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="">Inicio:</label>
+                    <input type="time" name="inicio" id="inicio">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="">Fin:</label>
+                    <input type="time" name="fin" id="fin">
+                  </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                      <label for="">Fecha:</label>
+                      <input type="date" name="fecha" id="fecha">
+                    </div>
+                  </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label for="">Motivo:</label>
+                    <input type="text" name="motivo" id="motivo">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function(){
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl,{
+                initialView: 'dayGridMonth',
+                selectable : true,
+                weekends:false,
+                select : function(info){
+                    $('#fecha').val(info.startStr);
+                    $('#exampleModal').modal('show');
+                },
+                eventSources:
+                {
+                    url : 'http://localhost/sw15_movil_servicios/index.php/eventos/api/citas'
+                }
+            });
+            calendar.render();
+            $('#citas_form').on('submit',function(e){
+                event.preventDefault();
+
+                var datos = {
+                    id : null,
+                    nombre : $('#nombre').val(),
+                    inicio : $('#inicio').val()+":00",
+                    fin : $('#fin').val()+":00",
+                    fecha : $('#fecha').val(),
+                    motivo : $('#motivo').val()
+                }
+                console.log(datos);
+                fetch(
+                    "http://localhost/sw15_movil_servicios/index.php/eventos/api/citas",
+                    {
+                        method : 'POST',
+                        headers : {
+                        'Content-Type' : 'application/json'
+                        },
+                        body : JSON.stringify(datos)
+                    }
+                )
+                $('#exampleModal').modal('hide');
+                calendar.refetchEvents();
+            });
+
+        });
+    </script>
+</body>
+</html>
